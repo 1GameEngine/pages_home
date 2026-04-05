@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canvas vs WebGL 渲染性能测试</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; min-height: 100%;
+      background: #0a0a14;
+      color: #e2e8f0;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+    }
+
+    /* ── 顶部导航 ── */
+    header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 24px;
+      height: 52px;
+      background: rgba(10,10,20,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .logo { font-size: 16px; font-weight: 700; color: #fff; }
+    .logo span { color: #7c6aef; }
+    .back-link {
+      margin-left: auto; font-size: 13px;
+      color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s;
+    }
+    .back-link:hover { color: #fff; }
+
+    /* ── 主体布局 ── */
+    .app {
+      display: flex; flex-direction: column;
+      height: calc(100vh - 52px); overflow: hidden;
+    }
+
+    /* ── 控制面板 ── */
+    .controls {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 12px 20px; padding: 12px 20px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .ctrl-group { display: flex; align-items: center; gap: 8px; }
+    .ctrl-label { font-size: 12px; color: rgba(255,255,255,0.45); white-space: nowrap; }
+
+    select, input[type="range"] {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #e2e8f0; border-radius: 6px;
+      padding: 4px 8px; font-size: 13px; cursor: pointer;
+    }
+    select:focus, input[type="range"]:focus { outline: none; border-color: #7c6aef; }
+    input[type="range"] { padding: 0; width: 120px; accent-color: #7c6aef; }
+
+    .value-display { font-size: 12px; color: #a78bfa; min-width: 36px; text-align: right; }
+
+    .btn {
+      padding: 5px 14px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #e2e8f0; font-size: 13px; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+    .btn.active { background: rgba(124,106,239,0.25); border-color: #7c6aef; color: #a78bfa; }
+
+    /* ── 后端切换开关 ── */
+    .backend-switch {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 3px; gap: 2px;
+    }
+    .backend-btn {
+      padding: 4px 14px; border-radius: 6px;
+      border: none; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.18s;
+      background: transparent; color: rgba(255,255,255,0.4);
+    }
+    .backend-btn.active-canvas {
+      background: rgba(59,130,246,0.25);
+      color: #60a5fa;
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.4);
+    }
+    .backend-btn.active-webgl {
+      background: rgba(34,197,94,0.2);
+      color: #4ade80;
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.35);
+    }
+
+    /* ── 渲染区域 ── */
+    .render-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* ── 面板头 ── */
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+    .panel-title { font-size: 13px; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 8px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 500;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .badge-canvas { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+    .badge-webgl  { background: rgba(34,197,94,0.12);  color: #4ade80; border: 1px solid rgba(34,197,94,0.22); }
+
+    .panel-stats { display: flex; gap: 20px; font-size: 12px; }
+    .stat-item { display: flex; flex-direction: column; align-items: flex-end; }
+    .stat-value {
+      font-size: 18px; font-weight: 700;
+      font-variant-numeric: tabular-nums; line-height: 1;
+    }
+    .stat-value.fps-good { color: #4ade80; }
+    .stat-value.fps-ok   { color: #facc15; }
+    .stat-value.fps-bad  { color: #f87171; }
+    .stat-label { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+    /* ── Canvas 容器 ── */
+    .canvas-wrapper {
+      flex: 1; position: relative; overflow: hidden;
+    }
+    .canvas-wrapper canvas {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; display: block;
+    }
+
+    /* ── 底部图表 ── */
+    .chart-area {
+      height: 110px; flex-shrink: 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .chart-area canvas {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .chart-label {
+      position: absolute; top: 6px; left: 12px;
+      font-size: 10px; color: rgba(255,255,255,0.25); pointer-events: none;
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/perf-test-gQIUT0M5.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/render-scene-canvas-C4zXFaoi.js">
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>1</span>GameEngine</div>
+  <span style="color:rgba(255,255,255,0.3);font-size:13px;">渲染性能测试</span>
+  <a class="back-link" href="./index.html">← 返回</a>
+</header>
+
+<div class="app">
+  <!-- 控制面板 -->
+  <div class="controls">
+
+    <!-- 后端切换 -->
+    <div class="ctrl-group">
+      <span class="ctrl-label">渲染后端</span>
+      <div class="backend-switch">
+        <button class="backend-btn active-canvas" id="btnCanvas">Canvas 2D</button>
+        <button class="backend-btn" id="btnWebGL">WebGL</button>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <span class="ctrl-label">测试场景</span>
+      <select id="sceneSelect">
+        <option value="rects">大量矩形（批处理压力）</option>
+        <option value="animated">动画节点（动态场景）</option>
+        <option value="mixed">混合图形（真实场景）</option>
+        <option value="text">文本渲染（光栅化压力）</option>
+      </select>
+    </div>
+
+    <div class="ctrl-group">
+      <span class="ctrl-label">节点数量</span>
+      <input type="range" id="nodeCount" min="10" max="1000" step="10" value="200" />
+      <span class="value-display" id="nodeCountDisplay">200</span>
+    </div>
+
+    <div class="ctrl-group">
+      <button class="btn active" id="animBtn">动画：开</button>
+    </div>
+
+    <div class="ctrl-group">
+      <button class="btn" id="resetBtn">重置</button>
+    </div>
+  </div>
+
+  <!-- 渲染区域 -->
+  <div class="render-area">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span id="backendLabel">Canvas 2D</span>
+        <span class="badge badge-canvas" id="backendBadge">Canvas</span>
+      </div>
+      <div class="panel-stats">
+        <div class="stat-item">
+          <span class="stat-value fps-good" id="statFps">--</span>
+          <span class="stat-label">FPS</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="statRenderMs" style="color:#94a3b8">--</span>
+          <span class="stat-label">渲染 ms</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="statP95" style="color:#94a3b8">--</span>
+          <span class="stat-label">P95 ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-wrapper">
+      <canvas id="renderCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- FPS 折线图 -->
+  <div class="chart-area">
+    <canvas id="fpsChart"></canvas>
+    <div class="chart-label" id="chartLabel">Canvas 2D — FPS 历史</div>
+  </div>
+</div>
+
+</body>
+</html>
