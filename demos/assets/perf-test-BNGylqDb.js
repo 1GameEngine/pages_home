@@ -376,18 +376,16 @@ void main() {
   color = mix(color, v_fillColor, fillAlpha);
 
   if (v_strokeWidth > 0.0 && v_strokeColor.a > 0.0) {
-    // 内边框：双边 smoothstep 实现，与 Canvas 后端 clip+2x lineWidth 的效果一致
-    // 外边缘（dist=0）：smoothstep(fw, -fw, dist) 从外向内过渡
-    // 内边缘（dist=-strokeWidth）：smoothstep(-fw, fw, dist+strokeWidth) 从内向外过渡
-    // 两者相乘得到 stroke 区域 [−strokeWidth, 0] 内的 alpha
-    float strokeAlpha;
-    if (shapeType == 0) {
-      // rect 使用硬边界 step
-      strokeAlpha = step(dist, 0.0) * step(-v_strokeWidth, dist);
-    } else {
-      strokeAlpha = smoothstep(fw, -fw, dist) * smoothstep(-fw, fw, dist + v_strokeWidth);
-    }
-    color = mix(color, v_strokeColor, strokeAlpha);
+    // 内边框：step 硬边界，与 Canvas 后端 clip+2x lineWidth 的效果一致
+    // stroke 区域为 dist ∈ [−strokeWidth, 0]，区域内 strokeAlpha = 1.0
+    float strokeAlpha = step(dist, 0.0) * step(-v_strokeWidth, dist);
+    // src-over 合成：模拟 Canvas ctx.stroke() 在 fill 上叠加的行为
+    // Canvas: out = fill * (1 - stroke_a) + stroke_rgb * stroke_a
+    // WebGL mix 替换会将 color 完全替换为预乘格式的 v_strokeColor，
+    // 导致半透明边框丢失 fill 颜色。改用 src-over：
+    // out = v_strokeColor + color * (1 - v_strokeColor.a)
+    color = v_strokeColor + color * (1.0 - v_strokeColor.a) * strokeAlpha
+          + color * (1.0 - strokeAlpha);
   }
 
   ${i} = color;
