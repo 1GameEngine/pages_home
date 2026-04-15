@@ -1,167 +1,217 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>1GameEngine — Demos</title>
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1GameEngine — Demos</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    html, body {
-      width: 100%; min-height: 100%;
-      background: #0a0a14;
-      color: #e2e8f0;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    }
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        background: #0a0a14;
+        color: #e2e8f0;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
 
-    /* ── 顶部导航 ── */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; gap: 12px;
-      padding: 0 32px;
-      height: 56px;
-      background: rgba(10,10,20,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .logo {
-      font-size: 17px; font-weight: 700;
-      letter-spacing: -0.3px;
-      color: #fff;
-    }
-    .logo span { color: #7c6aef; }
-    .logo-badge {
-      font-size: 11px; font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 20px;
-      background: rgba(124,106,239,0.18);
-      color: #a78bfa;
-      border: 1px solid rgba(124,106,239,0.3);
-    }
-    header a.gh-link {
-      margin-left: auto;
-      display: flex; align-items: center; gap: 6px;
-      font-size: 13px; color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    header a.gh-link:hover { color: #fff; }
-    header a.gh-link svg { width: 18px; height: 18px; fill: currentColor; }
+      /* ── 顶部导航 ── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 32px;
+        height: 56px;
+        background: rgba(10, 10, 20, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .logo {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        color: #fff;
+      }
+      .logo span {
+        color: #7c6aef;
+      }
+      .logo-badge {
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: rgba(124, 106, 239, 0.18);
+        color: #a78bfa;
+        border: 1px solid rgba(124, 106, 239, 0.3);
+      }
+      header a.gh-link {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      header a.gh-link:hover {
+        color: #fff;
+      }
+      header a.gh-link svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
 
-    /* ── 主体 ── */
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 56px 32px 80px;
-    }
+      /* ── 主体 ── */
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 56px 32px 80px;
+      }
 
-    .hero {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-    .hero h1 {
-      font-size: 36px; font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #fff 30%, #a78bfa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 12px;
-    }
-    .hero p {
-      font-size: 16px;
-      color: rgba(255,255,255,0.45);
-      line-height: 1.6;
-    }
+      .hero {
+        text-align: center;
+        margin-bottom: 56px;
+      }
+      .hero h1 {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #fff 30%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 12px;
+      }
+      .hero p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.45);
+        line-height: 1.6;
+      }
 
-    /* ── 分类标题 ── */
-    .section-title {
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
+      /* ── 分类标题 ── */
+      .section-title {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.3);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
 
-    /* ── 卡片网格 ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
+      /* ── 卡片网格 ── */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+        margin-bottom: 48px;
+      }
 
-    .card {
-      display: flex; flex-direction: column;
-      padding: 20px 22px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
-      cursor: pointer;
-    }
-    .card:hover {
-      background: rgba(255,255,255,0.07);
-      border-color: rgba(124,106,239,0.45);
-      transform: translateY(-2px);
-    }
-    .card:active { transform: translateY(0); }
+      .card {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 22px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        cursor: pointer;
+      }
+      .card:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(124, 106, 239, 0.45);
+        transform: translateY(-2px);
+      }
+      .card:active {
+        transform: translateY(0);
+      }
 
-    .card-icon {
-      font-size: 28px;
-      margin-bottom: 10px;
-      line-height: 1;
-    }
-    .card-title {
-      font-size: 15px; font-weight: 600;
-      color: #f1f5f9;
-      margin-bottom: 4px;
-    }
-    .card-desc {
-      font-size: 13px;
-      color: rgba(255,255,255,0.42);
-      line-height: 1.55;
-      flex: 1;
-    }
-    .card-tags {
-      display: flex; flex-wrap: wrap; gap: 6px;
-      margin-top: 14px;
-    }
-    .tag {
-      font-size: 11px; font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.45);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .tag.purple { background: rgba(124,106,239,0.12); color: #a78bfa; border-color: rgba(124,106,239,0.25); }
-    .tag.green  { background: rgba(34,197,94,0.10);  color: #4ade80; border-color: rgba(34,197,94,0.22); }
-    .tag.blue   { background: rgba(59,130,246,0.10); color: #60a5fa; border-color: rgba(59,130,246,0.22); }
-    .tag.pink   { background: rgba(233,30,99,0.12);  color: #f06292; border-color: rgba(233,30,99,0.28); }
+      .card-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+        line-height: 1;
+      }
+      .card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin-bottom: 4px;
+      }
+      .card-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.42);
+        line-height: 1.55;
+        flex: 1;
+      }
+      .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 14px;
+      }
+      .tag {
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.07);
+        color: rgba(255, 255, 255, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .tag.purple {
+        background: rgba(124, 106, 239, 0.12);
+        color: #a78bfa;
+        border-color: rgba(124, 106, 239, 0.25);
+      }
+      .tag.green {
+        background: rgba(34, 197, 94, 0.1);
+        color: #4ade80;
+        border-color: rgba(34, 197, 94, 0.22);
+      }
+      .tag.blue {
+        background: rgba(59, 130, 246, 0.1);
+        color: #60a5fa;
+        border-color: rgba(59, 130, 246, 0.22);
+      }
+      .tag.pink {
+        background: rgba(233, 30, 99, 0.12);
+        color: #f06292;
+        border-color: rgba(233, 30, 99, 0.28);
+      }
 
-    /* ── 页脚 ── */
-    footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.2);
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <div class="logo"><span>1</span>GameEngine</div>
-  <div class="logo-badge">Demos</div>
-  <a class="gh-link" href="https://github.com/1GameEngine/1game-engine" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577
+      /* ── 页脚 ── */
+      footer {
+        text-align: center;
+        padding: 24px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo"><span>1</span>GameEngine</div>
+      <div class="logo-badge">Demos</div>
+      <a class="gh-link" href="https://github.com/1GameEngine/1game-engine" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577
         0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7
         3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236
         1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93
@@ -170,82 +220,102 @@
         3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22
         0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22
         0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57
-        C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-    </svg>
-    GitHub
-  </a>
-</header>
+        C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+          />
+        </svg>
+        GitHub
+      </a>
+    </header>
 
-<main>
-  <div class="hero">
-    <h1>1GameEngine Demos</h1>
-    <p>基于 @1game/engine 构建的交互式 demo 合集<br>探索引擎能力与游戏示例</p>
-  </div>
+    <main>
+      <div class="hero">
+        <h1>1GameEngine Demos</h1>
+        <p>基于 @1game/engine 构建的交互式 demo 合集<br />探索引擎能力与游戏示例</p>
+      </div>
 
-  <!-- 游戏 Demo -->
-  <div class="section-title">Games</div>
-  <div class="grid">
-    <a class="card" href="./games/snake/index.html">
-      <div class="card-icon">🐍</div>
-      <div class="card-title">贪吃蛇</div>
-      <div class="card-desc">经典贪吃蛇游戏，支持键盘控制（方向键/WASD）和移动端手势滑动。吃食物增长，避免碰撞！</div>
-      <div class="card-tags">
-        <span class="tag green">Game</span>
-        <span class="tag purple">Solid JSX</span>
-        <span class="tag">Touch</span>
+      <!-- 游戏 Demo -->
+      <div class="section-title">Games</div>
+      <div class="grid">
+        <a class="card" href="./games/snake/index.html">
+          <div class="card-icon">🐍</div>
+          <div class="card-title">贪吃蛇</div>
+          <div class="card-desc">经典贪吃蛇游戏，支持键盘控制（方向键/WASD）和移动端手势滑动。吃食物增长，避免碰撞！</div>
+          <div class="card-tags">
+            <span class="tag green">Game</span>
+            <span class="tag purple">Solid JSX</span>
+            <span class="tag">Touch</span>
+          </div>
+        </a>
+        <a class="card" href="./games/2048/index.html">
+          <div class="card-icon">🎀</div>
+          <div class="card-title">2048</div>
+          <div class="card-desc">粉色主题的经典 2048 数字合并游戏。方向键或 WASD 移动方块，合并相同数字，挑战 2048！</div>
+          <div class="card-tags">
+            <span class="tag pink">Game</span>
+            <span class="tag purple">Solid JSX</span>
+            <span class="tag">2048</span>
+          </div>
+        </a>
+        <a class="card" href="./games/minesweeper/index.html">
+          <div class="card-icon">💣</div>
+          <div class="card-title">扫雷</div>
+          <div class="card-desc">经典扫雷游戏，支持初级、中级、高级三种难度。左键揭开，右键插旗。</div>
+          <div class="card-tags">
+            <span class="tag green">Game</span>
+            <span class="tag purple">Solid JSX</span>
+            <span class="tag">Scene</span>
+          </div>
+        </a>
       </div>
-    </a>
-    <a class="card" href="./games/2048/index.html">
-      <div class="card-icon">🎀</div>
-      <div class="card-title">2048</div>
-      <div class="card-desc">粉色主题的经典 2048 数字合并游戏。方向键或 WASD 移动方块，合并相同数字，挑战 2048！</div>
-      <div class="card-tags">
-        <span class="tag pink">Game</span>
-        <span class="tag purple">Solid JSX</span>
-        <span class="tag">2048</span>
-      </div>
-    </a>
-    <a class="card" href="./games/minesweeper/index.html">
-      <div class="card-icon">💣</div>
-      <div class="card-title">扫雷</div>
-      <div class="card-desc">经典扫雷游戏，支持初级、中级、高级三种难度。左键揭开，右键插旗。</div>
-      <div class="card-tags">
-        <span class="tag green">Game</span>
-        <span class="tag purple">Solid JSX</span>
-        <span class="tag">Scene</span>
-      </div>
-    </a>
-  </div>
 
-  <!-- 引擎 Demo -->
-  <div class="section-title">Engine</div>
-  <div class="grid">
-    <a class="card" href="./engine-demo.html">
-      <div class="card-icon">⚙️</div>
-      <div class="card-title">Engine Demo</div>
-      <div class="card-desc">展示 @1game/engine 核心能力：节点树、动画、时间旅行调试。</div>
-      <div class="card-tags">
-        <span class="tag blue">Engine</span>
-        <span class="tag purple">Solid JSX</span>
-        <span class="tag">History</span>
+      <!-- 引擎 Demo -->
+      <div class="section-title">Engine</div>
+      <div class="grid">
+        <a class="card" href="./engine-demo.html">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Engine Demo</div>
+          <div class="card-desc">展示 @1game/engine 核心能力：节点树、动画、时间旅行调试。</div>
+          <div class="card-tags">
+            <span class="tag blue">Engine</span>
+            <span class="tag purple">Solid JSX</span>
+            <span class="tag">History</span>
+          </div>
+        </a>
+        <a class="card" href="./physics-rotating-wall-demo/">
+          <div class="card-icon">🌀</div>
+          <div class="card-title">Physics Rotating Wall Demo</div>
+          <div class="card-desc">旋转矩形墙内小球自由弹跳；点击场景可在墙内生成随机颜色小球，支持暂停与时间回溯。</div>
+          <div class="card-tags">
+            <span class="tag blue">Physics</span>
+            <span class="tag purple">Time Travel</span>
+            <span class="tag">Interactive</span>
+          </div>
+        </a>
+        <a class="card" href="./physics-line-constraint-demo/">
+          <div class="card-icon">📎</div>
+          <div class="card-title">Physics Line Constraint</div>
+          <div class="card-desc">
+            基于 &lt;line&gt; 节点的线性约束：多摆锤（可碰撞）、弹簧网格与链条；可在 Matter.js 与 Planck.js 之间切换。
+          </div>
+          <div class="card-tags">
+            <span class="tag blue">Physics</span>
+            <span class="tag purple">Solid JSX</span>
+            <span class="tag">Constraint</span>
+          </div>
+        </a>
+        <a class="card" href="./perf-test.html">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Canvas vs WebGL 性能对比</div>
+          <div class="card-desc">并排对比 Canvas 2D 与 WebGL 渲染后端的帧率、帧时间与 P95 延迟，支持多种压力测试场景与节点数量调节。</div>
+          <div class="card-tags">
+            <span class="tag blue">Render</span>
+            <span class="tag green">WebGL</span>
+            <span class="tag">Perf</span>
+          </div>
+        </a>
       </div>
-    </a>
-    <a class="card" href="./perf-test.html">
-      <div class="card-icon">⚡</div>
-      <div class="card-title">Canvas vs WebGL 性能对比</div>
-      <div class="card-desc">并排对比 Canvas 2D 与 WebGL 渲染后端的帧率、帧时间与 P95 延迟，支持多种压力测试场景与节点数量调节。</div>
-      <div class="card-tags">
-        <span class="tag blue">Render</span>
-        <span class="tag green">WebGL</span>
-        <span class="tag">Perf</span>
-      </div>
-    </a>
-  </div>
-</main>
+    </main>
 
-<footer>
-  1GameEngine &nbsp;·&nbsp; MIT License
-</footer>
-
-</body>
+    <footer>1GameEngine &nbsp;·&nbsp; MIT License</footer>
+  </body>
 </html>
