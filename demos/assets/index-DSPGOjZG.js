@@ -1,4 +1,4 @@
-import{c as de,g as Be}from"./render-scene-canvas-C1Ec_z4d.js";var ee={exports:{}};/*!
+import{c as de,g as Be}from"./render-scene-canvas-BEnEARc8.js";var ee={exports:{}};/*!
  * matter-js 0.19.0 by @liabru
  * http://brm.io/matter-js/
  * License MIT

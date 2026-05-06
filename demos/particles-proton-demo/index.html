@@ -55,7 +55,13 @@
       }
       #hud .btn-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 8px;
+      }
+      button.active-backend {
+        border-color: #5a9fff;
+        background: rgba(90, 159, 255, 0.22);
+        color: #e8f2ff;
       }
       button {
         appearance: none;
@@ -71,9 +77,11 @@
         background: rgba(255, 255, 255, 0.14);
       }
     </style>
-    <script type="module" crossorigin src="../assets/particles-proton-demo/index-v3Etn8iI.js"></script>
-    <link rel="modulepreload" crossorigin href="../assets/render-scene-canvas-C1Ec_z4d.js">
-    <link rel="modulepreload" crossorigin href="../assets/renderGame-BR5M_ZV-.js">
+    <script type="module" crossorigin src="../assets/particles-proton-demo/index-nDyZE-YS.js"></script>
+    <link rel="modulepreload" crossorigin href="../assets/render-scene-canvas-BEnEARc8.js">
+    <link rel="modulepreload" crossorigin href="../assets/renderGame-C--JRFft.js">
+    <link rel="modulepreload" crossorigin href="../assets/use-audio-DEUY9WQe.js">
+    <link rel="modulepreload" crossorigin href="../assets/render-scene-webgl-Bffd6VCx.js">
   </head>
   <body>
     <div id="app">
@@ -82,7 +90,10 @@
         <div class="title">ParticlesEmitter + Proton</div>
         <div class="tips">点击场景生成一次爆发粒子</div>
         <div id="particles-count" class="value">particles: 0</div>
+        <div class="tips">渲染后端：<span id="hud-backend">Canvas 2D</span></div>
         <div class="btn-row">
+          <button type="button" id="btn-canvas">Canvas</button>
+          <button type="button" id="btn-webgl">WebGL</button>
           <button id="toggle-btn">暂停</button>
           <button id="burst-btn">爆发</button>
         </div>
